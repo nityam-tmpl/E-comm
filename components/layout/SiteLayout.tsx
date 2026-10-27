@@ -1,5 +1,6 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../Header";
+import Footer from "../Footer";
+import Newsletter from "../NewsLetter";
 
 export default function SiteLayout({
   children,
@@ -7,10 +8,11 @@ export default function SiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div>
       <Header />
       {children}
-      <Footer/>
-    </>
+      <Newsletter />
+      <Footer />
+    </div>
   );
 }

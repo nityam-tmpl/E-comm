@@ -1,6 +1,4 @@
-
-
-import type { Product } from "../types/product";
+import type { Product } from "../app/types/product";
 import ProductCard from "./ProductCard";
 
 type Props = {
@@ -9,17 +7,17 @@ type Props = {
 
 export default function TopSelling({ products }: Props) {
   const TopSelling = [...products]
-  .sort((a, b) => b.rating.count - a.rating.count)
-  .filter((product) => product.id > 4)
-  .slice(0, 4);
+    .sort((a, b) => b.rating.count - a.rating.count)
+    .filter((product) => product.id > 4)
+    .slice(0, 4);
 
   return (
-    <section className="mx-12 max-w-8xl px-3 py-14 md:px-8">
-      <h2 className="text-center text-[48px]font-league font-black uppercase sm:text-4xl">
+    <section className="mx-4 max-w-8xl px-0 py-14 sm:mx-12 sm:px-3 md:px-8">
+      <h2 className="text-center text-[36px] font-league font-black uppercase sm:text-4xl">
         Top Selling
       </h2>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         {TopSelling.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

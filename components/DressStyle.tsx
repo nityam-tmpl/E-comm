@@ -8,17 +8,17 @@ const styles = [
 
 export default function DressStyle() {
   return (
-    <section className="mx-12 max-w-7.5xl px-5 py-12 md:px-8">
-      <div className="rounded-3xl bg-[#F0F0F0] p-5 sm:p-8 md:p-10">
-        <h2 className="text-center text-5xl mt-7 mb-15  font-league font-black uppercase ">
+    <section className="mx-4 max-w-7.5xl px-0 py-8 sm:mx-12 sm:px-5 sm:py-12 md:px-8">
+      <div className="rounded-3xl bg-[#F0F0F0] p-4 sm:p-8 md:p-10">
+        <h2 className="mt-4 mb-8 text-center font-league text-[32px] font-black uppercase sm:mt-7 sm:mb-15 sm:text-5xl">
           Browse by Dress Style
         </h2>
 
-        <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-5">
+        <div className="mt-4 grid grid-cols-1 justify-items-center gap-4 sm:mt-7 sm:grid-cols-5 sm:justify-items-stretch">
           {styles.map((style, index) => (
             <div
               key={style.name}
-              className={`relative h-80 overflow-hidden rounded-xl bg-white sm:h-52 ${
+              className={`relative h-80 w-full overflow-hidden rounded-xl bg-white sm:h-52 ${
                 index === 0 || index === 3
                   ? "sm:col-span-2"
                   : "sm:col-span-3"
@@ -27,11 +27,8 @@ export default function DressStyle() {
               <img
                 src={style.image}
                 alt={style.name}
-                
-                className="h-[289px] w-full  "
+                className="h-[220px] w-full object-cover object-right sm:h-[289px]"
               />
-
-              
             </div>
           ))}
         </div>

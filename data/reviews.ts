@@ -1,5 +1,5 @@
 
-import type { CustomerReview } from "../types/product";
+import type { CustomerReview } from "../app/types/product";
 
 export const reviews: CustomerReview[] = [
   {

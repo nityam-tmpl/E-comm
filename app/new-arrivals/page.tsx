@@ -1,14 +1,13 @@
-import ProductCard from "../components/ProductCard"
+import ProductCard from "../../components/ProductCard";
 import type { Product } from "../types/product";
 
 export default async function NewArrivalsPage() {
   let products: Product[] = [];
 
   try {
-    const response = await fetch(
-      "https://fakestoreapi.com/products",
-      { next: { revalidate: 3600 } }
-    );
+    const response = await fetch("https://fakestoreapi.com/products", {
+      next: { revalidate: 3600 },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch products");

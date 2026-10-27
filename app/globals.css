@@ -25,7 +25,7 @@ body {
 }
 
 .page{
-  @apply px-25;
+  @apply px-2;
 }
 
 .brand-track {

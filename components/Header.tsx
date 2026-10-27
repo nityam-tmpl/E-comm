@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -25,7 +26,7 @@ export default function Header() {
   return (
     <header className="bg-white">
       {showOffer && (
-        <div className="relative flex items-center justify-center bg-black px-8 py-3 text-center font-sans text-[14px] text-white">
+        <div className="relative flex h-[34px] items-center justify-center bg-black px-8 text-center font-sans text-[12px] text-white md:h-[38px] md:text-[14px]">
           <p>
             Sign up and get 20% off to your first order.{" "}
             <Link href="/account" className="underline">
@@ -36,19 +37,19 @@ export default function Header() {
           <button
             onClick={() => setShowOffer(false)}
             aria-label="Close offer"
-            className="absolute right-4 text-lg"
+            className="absolute right-3 text-lg md:right-5"
           >
             ×
           </button>
         </div>
       )}
 
-      <div className="page mx-auto flex max-w-[97%] items-center gap-4 py-5 sm:gap-6">
+      <div className="mx-auto flex w-full max-w-[1440px] items-center gap-3 px-4 py-4 md:gap-6 md:px-6 md:py-5 lg:px-10">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
-          className="text-2xl md:hidden"
+          className="shrink-0 text-2xl leading-none md:hidden"
         >
           ☰
         </button>
@@ -60,6 +61,7 @@ export default function Header() {
             width={160}
             height={40}
             priority
+            className="h-auto w-[126px] page md:w-[160px]"
           />
         </Link>
 
@@ -104,8 +106,8 @@ export default function Header() {
           <Link href="/brands">Brands</Link>
         </nav>
 
-        <div className="ml-auto flex min-w-0 items-center gap-4 md:flex-1 md:gap-6">
-          <label className="hidden min-w-0 flex-1 items-center gap-3 rounded-full bg-gray-100 px-4 py-3 sm:flex">
+        <div className="ml-auto flex shrink-0 items-center gap-3 md:flex-1 md:gap-6">
+          <label className="hidden min-w-0 flex-1 items-center gap-3 rounded-full bg-gray-100 px-4 py-3 md:flex">
             <Search size={20} className="shrink-0 text-gray-500" />
             <input
               type="search"
@@ -159,11 +161,9 @@ export default function Header() {
           <Link href="/on-sale" onClick={closeMobileMenu}>
             On Sale
           </Link>
-
           <Link href="/new-arrivals" onClick={closeMobileMenu}>
             New Arrivals
           </Link>
-
           <Link href="/brands" onClick={closeMobileMenu}>
             Brands
           </Link>

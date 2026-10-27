@@ -1,7 +1,6 @@
-
 import { Suspense } from "react";
-import { getProducts } from "../../data/product";
-import ProductCard from "../../components/ProductCard";
+import { getProducts } from "../../../data/product";
+import ProductCard from "../../../components/ProductCard";
 import { notFound } from "next/navigation";
 
 const categories: Record<string, string> = {
@@ -40,7 +39,7 @@ async function CategoryContent({ params }: Props) {
   const products = await getProducts();
 
   const filteredProducts = products.filter(
-    (product) => product.category === categories[slug]
+    (product) => product.category === categories[slug],
   );
 
   return (

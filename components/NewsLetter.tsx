@@ -17,9 +17,9 @@ export default function Newsletter() {
   return (
     <section className="relative z-10 mx-auto mt-4 -mb-16 max-w-7xl px-5">
       <div className="flex flex-col justify-between gap-8 rounded-3xl bg-black px-6 py-8 text-white md:flex-row md:items-center md:px-16 md:py-10">
-        <h2 className="max-w-lg text-5xl font-bold font-league uppercase leading-tight md:text-4xl">
-          STAY UPTO DATE ABOUT OUR LATEST OFFERS
-        </h2>
+        <h2 className="max-w-lg font-league text-[32px] font-bold uppercase leading-[1.1] md:text-4xl md:leading-tight">
+  STAY UPTO DATE ABOUT OUR LATEST OFFERS
+</h2>
 
         <form
           onSubmit={handleSubmit}

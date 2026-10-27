@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -9,131 +8,118 @@ type Props = {
   productReviews: CustomerReview[];
 };
 
-export default function ProductOptions({
-  product,
-  productReviews,
-}: Props) {
-  const [selectedImage, setSelectedImage] = useState(product.image);
+const colors = [
+  { name: "Black", value: "#000000" },
+  { name: "White", value: "#FFFFFF" },
+  { name: "Blue", value: "#2563EB" },
+  { name: "Green", value: "#16A34A" },
+];
+
+const sizes = ["S", "M", "L", "XL", "XXL"];
+
+const faqs = [
+  {
+    question: "What is the product made of?",
+    answer:
+      "Please check the product description for information about its material and features.",
+  },
+  {
+    question: "How can I choose the right size?",
+    answer:
+      "Select the size that best suits your requirements from the available size options.",
+  },
+  {
+    question: "Can I return this product?",
+    answer:
+      "Please check the store's return policy for eligibility and return instructions.",
+  },
+];
+
+export default function ProductOptions({ product, productReviews }: Props) {
+  const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState("Black");
   const [selectedSize, setSelectedSize] = useState("M");
   const [addedToCart, setAddedToCart] = useState(false);
   const [activeTab, setActiveTab] = useState("reviews");
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const colors = [
-    { name: "Black", value: "#000000" },
-    { name: "White", value: "#FFFFFF" },
-    { name: "Blue", value: "#2563EB" },
-    { name: "Green", value: "#16A34A" },
-  ];
-
-  const sizes = ["S", "M", "L", "XL", "XXL"];
-
-  const faqs = [
-    {
-      question: "What is the return policy?",
-      answer:
-        "Please check the store's return policy for eligibility and return instructions.",
-    },
-    {
-      question: "How can I track my order?",
-      answer:
-        "Order tracking details are usually provided after an order has been placed and dispatched.",
-    },
-    {
-      question: "What sizes are available?",
-      answer:
-        "Choose from the available size options shown above. Size options are illustrative for this demo.",
-    },
-    {
-      question: "Are different colors available?",
-      answer:
-        "Select a color swatch above to change the selected color. This demo does not load separate images for each color.",
-    },
-  ];
-
-  const tabs = [
-    { id: "details", label: "Product Details" },
-    { id: "reviews", label: "Customer Reviews" },
-    { id: "faqs", label: "FAQs" },
-  ];
+  const images = [product.image, product.image, product.image];
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      {/* Main Product Section */}
-      <div className="grid items-stretch gap-8 md:grid-cols-2 md:gap-12">
-        {/* Product Images */}
-        <div className="grid h-[530px] grid-cols-[80px_minmax(0,1fr)] gap-4">
-          <div className="grid grid-rows-3 gap-3">
-            {[1, 2, 3].map((item) => (
+    <main className="font-roboto">
+      {/* Product gallery and information */}
+      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="flex h-[530px] min-h-0 gap-4">
+          <div className="flex h-full w-20 shrink-0 flex-col gap-3">
+            {images.map((image, index) => (
               <button
-                key={item}
+                key={index}
                 type="button"
-                onClick={() => setSelectedImage(product.image)}
-                className="flex min-h-0 items-center justify-center overflow-hidden rounded-xl border border-gray-300 bg-white p-2 hover:border-black"
+                onClick={() => setSelectedImage(index)}
+                aria-label={`View image ${index + 1}`}
+                className={`flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border p-2 ${
+                  selectedImage === index ? "border-black" : "border-gray-200"
+                }`}
               >
                 <img
-                  src={product.image}
-                  alt={`${product.title} thumbnail ${item}`}
+                  src={image}
+                  alt={`${product.title} view ${index + 1}`}
                   className="h-full w-full object-contain"
                 />
               </button>
             ))}
           </div>
 
-          <div className="flex h-[530px] items-center justify-center rounded-2xl bg-gray-100 p-6">
+          <div className="flex h-full min-w-0 flex-1 items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-4 sm:p-6">
             <img
-              src={selectedImage}
+              src={images[selectedImage]}
               alt={product.title}
               className="h-full w-full object-contain"
             />
           </div>
         </div>
 
-        {/* Product Information */}
-        <div className="flex h-[530px] flex-col">
-          <p className="text-sm capitalize text-gray-500">
-            {product.category}
-          </p>
+        <div className="flex min-h-[530px] flex-col">
+          <p className="text-sm capitalize text-gray-500">{product.category}</p>
 
-          <h1 className="mt-2 font-league text-3xl font-bold sm:text-4xl">
+          <h1 className="mt-3 font-league text-3xl font-bold sm:text-4xl">
             {product.title}
           </h1>
 
-          <p className="mt-4 text-2xl font-semibold">
-            ${product.price.toFixed(2)}
-          </p>
-
-          {/* Rating */}
-          <p className="mt-3 text-yellow-500">
-            {"★".repeat(Math.round(product.rating.rate))}
-            <span className="text-gray-300">
-              {"★".repeat(5 - Math.round(product.rating.rate))}
+          <div className="mt-4 flex items-center gap-2">
+            <span className="text-lg text-amber-400">
+              {"★".repeat(
+                Math.max(0, Math.min(5, Math.round(product.rating.rate))),
+              )}
+              <span className="text-gray-200">
+                {"★".repeat(
+                  5 - Math.max(0, Math.min(5, Math.round(product.rating.rate))),
+                )}
+              </span>
             </span>
-            <span className="ml-2 text-gray-500">
+
+            <span className="text-sm text-gray-500">
               {product.rating.rate} ({product.rating.count} ratings)
             </span>
-          </p>
+          </div>
 
-          <p className="mt-4 line-clamp-4 font-roboto leading-6 text-gray-600">
-            {product.description}
-          </p>
+          <p className="mt-5 text-2xl font-bold">${product.price.toFixed(2)}</p>
+
+          <p className="mt-5 leading-7 text-gray-600">{product.description}</p>
 
           {/* Colors */}
           <div className="mt-6">
-            <h2 className="font-semibold">
-              Color: <span className="font-normal">{selectedColor}</span>
-            </h2>
+            <p className="mb-3 font-medium">Color: {selectedColor}</p>
 
-            <div className="mt-3 flex gap-3">
+            <div className="flex items-center gap-3">
               {colors.map((color) => (
                 <button
                   key={color.name}
                   type="button"
-                  onClick={() => setSelectedColor(color.name)}
-                  aria-label={color.name}
                   title={color.name}
-                  className={`flex h-10 w-10 items-center justify-center rounded-full border ${
+                  aria-label={`Select ${color.name}`}
+                  onClick={() => setSelectedColor(color.name)}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border ${
                     selectedColor === color.name
                       ? "border-black ring-2 ring-black ring-offset-2"
                       : "border-gray-300"
@@ -149,18 +135,16 @@ export default function ProductOptions({
           </div>
 
           {/* Sizes */}
-          <div className="mt-5">
-            <h2 className="font-semibold">
-              Size: <span className="font-normal">{selectedSize}</span>
-            </h2>
+          <div className="mt-6">
+            <p className="mb-3 font-medium">Size: {selectedSize}</p>
 
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {sizes.map((size) => (
                 <button
                   key={size}
                   type="button"
                   onClick={() => setSelectedSize(size)}
-                  className={`rounded-lg border px-4 py-2 ${
+                  className={`min-w-12 rounded-md border px-4 py-2 ${
                     selectedSize === size
                       ? "border-black bg-black text-white"
                       : "border-gray-300 hover:border-black"
@@ -172,126 +156,186 @@ export default function ProductOptions({
             </div>
           </div>
 
-          {/* Add to Cart */}
+          {/* Add to cart */}
           <button
             type="button"
             onClick={() => setAddedToCart(!addedToCart)}
-            className={`mt-auto w-full rounded-full px-6 py-4 font-semibold transition ${
-              addedToCart
-                ? "bg-green-600 text-white"
-                : "bg-black text-white hover:bg-gray-800"
+            className={`mt-3 w-full rounded-full px-6 py-4 font-medium text-white transition ${
+              addedToCart ? "bg-green-700" : "bg-black hover:bg-gray-800"
             }`}
           >
             {addedToCart ? "Added to Cart ✓" : "Add to Cart"}
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Product Information Tabs */}
-      <section className="mt-16 border-t border-gray-200 pt-8">
-        {/* Tab Navigation */}
+      {/* Product details, reviews and FAQs */}
+      <section className="w-full px-6 py-10 sm:px-10 lg:px-12">
+        {/* Tabs */}
         <div className="grid grid-cols-3 border-b border-gray-200">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`border-b-2 px-2 py-4 text-center text-sm font-semibold transition sm:text-base ${
-                activeTab === tab.id
-                  ? "border-black text-black"
-                  : "border-transparent text-gray-500 hover:text-black"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+          <button
+            type="button"
+            onClick={() => setActiveTab("details")}
+            className={`border-b-2 py-5 text-sm ${
+              activeTab === "details"
+                ? "border-black text-black"
+                : "border-transparent text-gray-500"
+            }`}
+          >
+            Product Details
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("reviews")}
+            className={`border-b-2 py-5 text-sm ${
+              activeTab === "reviews"
+                ? "border-black text-black"
+                : "border-transparent text-gray-500"
+            }`}
+          >
+            Rating &amp; Reviews
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("faqs")}
+            className={`border-b-2 py-5 text-sm ${
+              activeTab === "faqs"
+                ? "border-black text-black"
+                : "border-transparent text-gray-500"
+            }`}
+          >
+            FAQs
+          </button>
         </div>
 
-        {/* Product Details Tab */}
+        {/* Product details */}
         {activeTab === "details" && (
           <div className="py-8">
-            <h2 className="font-league text-2xl font-bold">
-              Product Details
-            </h2>
+            <h2 className="font-league text-2xl font-bold">Product Details</h2>
 
-            <p className="mt-4 whitespace-pre-line font-roboto text-base leading-7 text-gray-600">
+            <p className="mt-4 max-w-5xl leading-7 text-gray-600">
               {product.description}
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="text-sm text-gray-500">Category</p>
-                <p className="mt-1 capitalize font-roboto font-medium">
+                <p className="mt-1 font-medium capitalize">
                   {product.category}
                 </p>
               </div>
 
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="text-sm text-gray-500">Price</p>
-                <p className="mt-1 font-roboto font-medium">
-                  ${product.price.toFixed(2)}
-                </p>
-              </div>
-
-              <div className="rounded-lg bg-gray-50 p-4">
-                <p className="text-sm text-gray-500">Customer Rating</p>
-                <p className="mt-1 font-roboto font-medium">
-                  {product.rating.rate} out of 5
-                </p>
-              </div>
-
-              <div className="rounded-lg bg-gray-50 p-4">
-                <p className="text-sm text-gray-500">Ratings Count</p>
-                <p className="mt-1 font-roboto font-medium">
-                  {product.rating.count}
-                </p>
+                <p className="mt-1 font-medium">${product.price.toFixed(2)}</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Customer Reviews Tab */}
+        {/* Customer reviews */}
         {activeTab === "reviews" && (
-          <div className="py-8">
-            <h2 className="font-league text-2xl font-bold">
-              Customer Reviews
-            </h2>
+          <div className="py-6">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <h2 className="font-league text-xl font-bold">
+                All Reviews{" "}
+                <span className="font-roboto text-xs font-normal text-gray-500">
+                  ({productReviews.length})
+                </span>
+              </h2>
+
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  aria-label="Filter reviews"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100"
+                >
+                  <span className="text-lg">☷</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="rounded-full bg-gray-100 px-5 py-3 text-xs"
+                >
+                  Latest
+                </button>
+
+                <button
+                  type="button"
+                  className="rounded-full bg-black px-6 py-3 text-xs text-white"
+                >
+                  Write a Review
+                </button>
+              </div>
+            </div>
 
             {productReviews.length > 0 ? (
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {productReviews.map((review) => (
-                  <div
+                  <article
                     key={review.id}
-                    className="rounded-xl border border-gray-200 p-5"
+                    className="rounded-2xl border border-gray-200 p-5 sm:p-6"
                   >
-                    <div className="flex items-center justify-between gap-3">
-                      <h3 className="font-league font-bold">
-                        {review.name}
-                      </h3>
-
-                      <p className="whitespace-nowrap text-yellow-500">
-                        {"★".repeat(review.rating)}
-                        <span className="text-gray-300">
-                          {"★".repeat(5 - review.rating)}
+                    <div className="flex items-center justify-between">
+                      <span className="tracking-wide text-amber-400">
+                        {"★".repeat(
+                          Math.max(0, Math.min(5, Math.round(review.rating))),
+                        )}
+                        <span className="text-gray-200">
+                          {"★".repeat(
+                            5 -
+                              Math.max(
+                                0,
+                                Math.min(5, Math.round(review.rating)),
+                              ),
+                          )}
                         </span>
-                      </p>
+                      </span>
+
+                      <span className="text-gray-400">···</span>
                     </div>
 
-                    <p className="mt-3 font-roboto text-sm leading-6 text-gray-600">
+                    <div className="mt-2 flex items-center gap-2">
+                      <h3 className="text-sm font-semibold">{review.name}</h3>
+
+                      <span
+                        title="Verified customer"
+                        className="flex h-4 w-4 items-center justify-center rounded-full bg-green-600 text-xs text-white"
+                      >
+                        ✓
+                      </span>
+                    </div>
+
+                    <p className="mt-3 text-sm leading-6 text-gray-500">
                       {review.comment}
                     </p>
-                  </div>
+
+                    <p className="mt-4 text-xs text-gray-500">
+                      Posted by {review.name}
+                    </p>
+                  </article>
                 ))}
               </div>
             ) : (
-              <p className="mt-4 font-roboto text-gray-500">
-                No reviews available for this product.
+              <p className="py-10 text-center text-gray-500">
+                No reviews available for this product yet.
               </p>
             )}
+
+            <div className="mt-7 flex justify-center">
+              <button
+                type="button"
+                className="rounded-full border border-gray-200 px-8 py-3 text-sm transition hover:bg-gray-50"
+              >
+                Load More Reviews
+              </button>
+            </div>
           </div>
         )}
 
-        {/* FAQs Tab */}
+        {/* FAQs */}
         {activeTab === "faqs" && (
           <div className="py-8">
             <h2 className="font-league text-2xl font-bold">
@@ -300,27 +344,20 @@ export default function ProductOptions({
 
             <div className="mt-6 divide-y divide-gray-200">
               {faqs.map((faq, index) => (
-                <div key={faq.question} className="py-4">
+                <div key={faq.question} className="py-5">
                   <button
                     type="button"
-                    onClick={() =>
-                      setOpenFaq(openFaq === index ? null : index)
-                    }
-                    className="flex w-full items-center justify-between gap-4 text-left"
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="flex w-full items-center justify-between gap-4 text-left font-medium"
                   >
-                    <span className="font-league font-semibold">
-                      {faq.question}
-                    </span>
-
+                    <span>{faq.question}</span>
                     <span className="text-xl">
                       {openFaq === index ? "−" : "+"}
                     </span>
                   </button>
 
                   {openFaq === index && (
-                    <p className="mt-3 font-roboto leading-6 text-gray-600">
-                      {faq.answer}
-                    </p>
+                    <p className="mt-3 leading-7 text-gray-600">{faq.answer}</p>
                   )}
                 </div>
               ))}
