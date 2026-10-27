@@ -1,3 +1,4 @@
+
 import TopSelling from "../components/TopSelling";
 import Hero from "../components/Hero";
 import BrandStrip from "../components/Slider";
@@ -10,15 +11,19 @@ export default async function Home() {
   let products: Product[] = [];
 
   try {
-    const response = await fetch("https://fakestoreapi.com/products", {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetch(
+      "https://dummyjson.com/products?limit=0",
+      {
+        next: { revalidate: 3600 },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch products");
     }
 
-    products = await response.json();
+    const data = await response.json();
+    products = data.products;
   } catch (error) {
     console.error("Product API error:", error);
   }
@@ -32,7 +37,6 @@ export default async function Home() {
       <TopSelling products={products} />
       <DressStyle />
       <CustomerReviews />
-     
     </main>
   );
 }
