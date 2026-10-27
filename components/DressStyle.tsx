@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const styles = [
-  { name: "Casual", image: "/images/casual.png" },
+  { name: "Casual", image: "/images/Formal.png" },
   { name: "Formal", image: "/images/Formal.png" },
   { name: "Party", image: "/images/Party.png" },
   { name: "Gym", image: "/images/Gym.png" },
@@ -24,7 +24,7 @@ export default function DressStyle() {
               }`}
             >
               <Image
-                src={style.image}
+                src="/images/Formal.png"
                 alt={style.name}
                 fill
                 className="object-cover object-top"
