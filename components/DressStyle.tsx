@@ -1,9 +1,10 @@
+import Image from "next/image";
 
 const styles = [
-  { name: "Casual", image: "/images/casual.png" },
-  { name: "Formal", image: "/images/formal.png" },
-  { name: "Party", image: "/images/party.png" },
-  { name: "Gym", image: "/images/gym.png" },
+  { name: "Casual", image: "/images/Casual.png" },
+  { name: "Formal", image: "/images/Formal.png" },
+  { name: "Party", image: "/images/Party.png" },
+  { name: "Gym", image: "/images/Gym.png" },
 ];
 
 export default function DressStyle() {
@@ -24,7 +25,7 @@ export default function DressStyle() {
                   : "sm:col-span-3"
               }`}
             >
-              <img
+              <Image
                 src={style.image}
                 alt={style.name}
                 className="h-[220px] w-full object-cover object-right sm:h-[289px]"
