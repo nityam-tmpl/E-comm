@@ -19,16 +19,15 @@ export default function DressStyle() {
           {styles.map((style, index) => (
             <div
               key={style.name}
-              className={`relative h-80 w-full overflow-hidden rounded-xl bg-white sm:h-52 ${
-                index === 0 || index === 3
-                  ? "sm:col-span-2"
-                  : "sm:col-span-3"
+              className={`relative h-55 w-full overflow-hidden rounded-xl bg-white sm:h-72.25 ${
+                index === 0 || index === 3 ? "sm:col-span-2" : "sm:col-span-3"
               }`}
             >
               <Image
                 src={style.image}
                 alt={style.name}
-                className="h-[220px] w-full object-cover object-right sm:h-[289px]"
+                fill
+                className="object-cover object-top"
               />
             </div>
           ))}

@@ -1,4 +1,3 @@
-
 import TopSelling from "../components/TopSelling";
 import Hero from "../components/Hero";
 import BrandStrip from "../components/Slider";
@@ -11,12 +10,9 @@ export default async function Home() {
   let products: Product[] = [];
 
   try {
-    const response = await fetch(
-      "https://dummyjson.com/products?limit=0",
-      {
-        next: { revalidate: 3600 },
-      }
-    );
+    const response = await fetch("https://dummyjson.com/products?limit=0", {
+      next: { revalidate: 60 },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch products");
