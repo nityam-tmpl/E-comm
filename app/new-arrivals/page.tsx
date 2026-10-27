@@ -1,19 +1,28 @@
+
 import ProductCard from "../../components/ProductCard";
 import type { Product } from "../types/product";
+
+type ProductsResponse = {
+  products: Product[];
+};
 
 export default async function NewArrivalsPage() {
   let products: Product[] = [];
 
   try {
-    const response = await fetch("https://fakestoreapi.com/products", {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetch(
+      "https://dummyjson.com/products?limit=0",
+      {
+        next: { revalidate: 3600 },
+      },
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch products");
     }
 
-    products = await response.json();
+    const data: ProductsResponse = await response.json();
+    products = data.products;
   } catch (error) {
     console.error("Failed to load products:", error);
   }

@@ -11,7 +11,7 @@ export default function newArrivals({ products }: Props) {
 
   return (
     <section className="mx-4 max-w-8xl px-0 py-14 sm:mx-12 sm:px-5">
-      <h2 className="text-center text-[36px] font-league font-black uppercase sm:text-4xl">
+      <h2 className="text-center text-[36px] font-league font-black uppercase sm:text-[48px]">
         New Arrivals
       </h2>
 

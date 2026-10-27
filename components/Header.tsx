@@ -16,6 +16,16 @@ export default function Header() {
     { name: "Jewellery", href: "/shop/jewellery" },
     { name: "Men Clothing", href: "/shop/men-clothing" },
     { name: "Women Clothing", href: "/shop/women-clothing" },
+    { name: "Beauty", href: "/shop/beauty" },
+    { name: "Skin Care", href: "/shop/skin-care" },
+    { name: "Fragrances", href: "/shop/fragrances" },
+    { name: "Furniture", href: "/shop/furniture" },
+    { name: "Groceries", href: "/shop/groceries" },
+    { name: "Home Decoration", href: "/shop/home-decoration" },
+    { name: "Kitchen Accessories", href: "/shop/kitchen-accessories" },
+    { name: "Sports Accessories", href: "/shop/sports-accessories" },
+    { name: "Sunglasses", href: "/shop/sunglasses" },
+    { name: "Vehicles", href: "/shop/vehicles" },
   ];
 
   const closeMobileMenu = () => {
@@ -46,7 +56,10 @@ export default function Header() {
 
       <div className="mx-auto flex w-full max-w-[1440px] items-center gap-3 px-4 py-4 md:gap-6 md:px-6 md:py-5 lg:px-10">
         <button
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => {
+            setMenuOpen(!menuOpen);
+            setShopOpen(false);
+          }}
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
           className="shrink-0 text-2xl leading-none md:hidden"
@@ -72,6 +85,7 @@ export default function Header() {
             onMouseLeave={() => setShopOpen(false)}
           >
             <button
+              type="button"
               onClick={() => setShopOpen(!shopOpen)}
               aria-expanded={shopOpen}
               className="flex items-center gap-1"
@@ -86,10 +100,10 @@ export default function Header() {
             </button>
 
             {shopOpen && (
-              <div className="absolute left-0 top-full z-50 w-52 rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
+              <div className="absolute left-0 top-full z-50 mt-2 max-h-[70vh] w-64 overflow-y-auto rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
                 {categories.map((category) => (
                   <Link
-                    key={category.name}
+                    key={category.href}
                     href={category.href}
                     onClick={() => setShopOpen(false)}
                     className="block rounded-lg px-4 py-3 transition hover:bg-gray-100"
@@ -130,6 +144,7 @@ export default function Header() {
       {menuOpen && (
         <nav className="flex flex-col gap-4 border-t px-5 py-4 text-sm md:hidden">
           <button
+            type="button"
             onClick={() => setShopOpen(!shopOpen)}
             className="flex items-center justify-between"
             aria-expanded={shopOpen}
@@ -144,13 +159,13 @@ export default function Header() {
           </button>
 
           {shopOpen && (
-            <div className="ml-4 flex flex-col gap-3 border-l pl-4">
+            <div className="ml-4 flex max-h-[50vh] flex-col gap-1 overflow-y-auto border-l pl-4">
               {categories.map((category) => (
                 <Link
-                  key={category.name}
+                  key={category.href}
                   href={category.href}
                   onClick={closeMobileMenu}
-                  className="text-gray-600 transition hover:text-black"
+                  className="rounded-md py-2 text-gray-600 transition hover:text-black"
                 >
                   {category.name}
                 </Link>
@@ -161,9 +176,11 @@ export default function Header() {
           <Link href="/on-sale" onClick={closeMobileMenu}>
             On Sale
           </Link>
+
           <Link href="/new-arrivals" onClick={closeMobileMenu}>
             New Arrivals
           </Link>
+
           <Link href="/brands" onClick={closeMobileMenu}>
             Brands
           </Link>

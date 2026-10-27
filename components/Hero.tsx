@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className="bg-[#F0EEEF]">
       <div className="page mx-auto grid items-center px-15 gap-8 pt-8 md:grid-cols-2 md:px-8 md:pt-16 lg:pt-20">
-        <div className="relative z-10 pb-0 md:pb-16">
+        <div className="relative z-10 pb-0 md:pb-10">
           <h1 className="font-league text-[36px] px-5 sm:px-15 font-bold uppercase leading-[0.98] tracking-wide text-black sm:text-5xl lg:text-[64px]">
             Find Clothes
             <br />
@@ -59,7 +59,7 @@ export default function Hero() {
         </div>
 
         <div className="relative mx-auto h-[448px] w-full max-w-none overflow-hidden sm:h-[452px] sm:w-[390px] lg:h-[520px] lg:w-full">
-  <Image
+    <Image
     src="/images/couple.jpg"
     alt="Models wearing the latest fashion collection"
     fill
@@ -67,6 +67,7 @@ export default function Hero() {
     sizes="(max-width: 639px) 100vw, 390px"
     className="object-contain  sm:-translate-x-4 sm:translate-y-20 sm:scale-[1.50]"
   />
+  
 
   <div className="absolute right-4 top-5  z-10 sm:right-25 sm:top-8">
     <Image

@@ -1,14 +1,19 @@
-import { Product } from "../app/types/product";
+
+import type { Product } from "../app/types/product";
 
 export async function getProducts(): Promise<Product[]> {
   const response = await fetch(
-    "https://fakestoreapi.com/products",
-    { cache: "force-cache" }
+    "https://dummyjson.com/products?limit=0",
+    {
+      next: { revalidate: 3600 },
+    }
   );
 
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
 
-  return response.json();
+  const data: { products: Product[] } = await response.json();
+
+  return data.products;
 }

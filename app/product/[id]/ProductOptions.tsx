@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -43,22 +44,34 @@ export default function ProductOptions({ product, productReviews }: Props) {
   const [activeTab, setActiveTab] = useState("reviews");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const images = [product.image, product.image, product.image];
+  const images =
+    product.images?.length > 0
+      ? product.images.slice(0, 3)
+      : [product.thumbnail, product.thumbnail, product.thumbnail];
+
+  const filledStars = Math.max(
+    0,
+    Math.min(5, Math.round(product.rating)),
+  );
+
+  const discountedPrice =
+    product.price * (1 - product.discountPercentage / 100);
 
   return (
     <main className="font-roboto">
-      {/* Product gallery and information */}
       <section className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div className="flex h-[530px] min-h-0 gap-4">
           <div className="flex h-full w-20 shrink-0 flex-col gap-3">
             {images.map((image, index) => (
               <button
-                key={index}
+                key={`${image}-${index}`}
                 type="button"
                 onClick={() => setSelectedImage(index)}
                 aria-label={`View image ${index + 1}`}
                 className={`flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border p-2 ${
-                  selectedImage === index ? "border-black" : "border-gray-200"
+                  selectedImage === index
+                    ? "border-black"
+                    : "border-gray-200"
                 }`}
               >
                 <img
@@ -80,7 +93,9 @@ export default function ProductOptions({ product, productReviews }: Props) {
         </div>
 
         <div className="flex min-h-[530px] flex-col">
-          <p className="text-sm capitalize text-gray-500">{product.category}</p>
+          <p className="text-sm capitalize text-gray-500">
+            {product.category.replaceAll("-", " ")}
+          </p>
 
           <h1 className="mt-3 font-league text-3xl font-bold sm:text-4xl">
             {product.title}
@@ -88,26 +103,36 @@ export default function ProductOptions({ product, productReviews }: Props) {
 
           <div className="mt-4 flex items-center gap-2">
             <span className="text-lg text-amber-400">
-              {"★".repeat(
-                Math.max(0, Math.min(5, Math.round(product.rating.rate))),
-              )}
+              {"★".repeat(filledStars)}
               <span className="text-gray-200">
-                {"★".repeat(
-                  5 - Math.max(0, Math.min(5, Math.round(product.rating.rate))),
-                )}
+                {"★".repeat(5 - filledStars)}
               </span>
             </span>
 
             <span className="text-sm text-gray-500">
-              {product.rating.rate} ({product.rating.count} ratings)
+              {product.rating.toFixed(1)} (
+              {product.reviews?.length ?? 0} reviews)
             </span>
           </div>
 
-          <p className="mt-5 text-2xl font-bold">${product.price.toFixed(2)}</p>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <p className="text-2xl font-bold">
+              ${discountedPrice.toFixed(2)}
+            </p>
 
-          <p className="mt-5 leading-7 text-gray-600">{product.description}</p>
+            <p className="text-lg text-gray-400 line-through">
+              ${product.price.toFixed(2)}
+            </p>
 
-          {/* Colors */}
+            <span className="rounded-full bg-red-100 px-3 py-1 text-sm text-red-600">
+              -{Math.round(product.discountPercentage)}%
+            </span>
+          </div>
+
+          <p className="mt-5 leading-7 text-gray-600">
+            {product.description}
+          </p>
+
           <div className="mt-6">
             <p className="mb-3 font-medium">Color: {selectedColor}</p>
 
@@ -134,7 +159,6 @@ export default function ProductOptions({ product, productReviews }: Props) {
             </div>
           </div>
 
-          {/* Sizes */}
           <div className="mt-6">
             <p className="mb-3 font-medium">Size: {selectedSize}</p>
 
@@ -156,7 +180,6 @@ export default function ProductOptions({ product, productReviews }: Props) {
             </div>
           </div>
 
-          {/* Add to cart */}
           <button
             type="button"
             onClick={() => setAddedToCart(!addedToCart)}
@@ -169,9 +192,7 @@ export default function ProductOptions({ product, productReviews }: Props) {
         </div>
       </section>
 
-      {/* Product details, reviews and FAQs */}
       <section className="w-full px-6 py-10 sm:px-10 lg:px-12">
-        {/* Tabs */}
         <div className="grid grid-cols-3 border-b border-gray-200">
           <button
             type="button"
@@ -210,10 +231,11 @@ export default function ProductOptions({ product, productReviews }: Props) {
           </button>
         </div>
 
-        {/* Product details */}
         {activeTab === "details" && (
           <div className="py-8">
-            <h2 className="font-league text-2xl font-bold">Product Details</h2>
+            <h2 className="font-league text-2xl font-bold">
+              Product Details
+            </h2>
 
             <p className="mt-4 max-w-5xl leading-7 text-gray-600">
               {product.description}
@@ -223,19 +245,36 @@ export default function ProductOptions({ product, productReviews }: Props) {
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="text-sm text-gray-500">Category</p>
                 <p className="mt-1 font-medium capitalize">
-                  {product.category}
+                  {product.category.replaceAll("-", " ")}
                 </p>
               </div>
 
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="text-sm text-gray-500">Price</p>
-                <p className="mt-1 font-medium">${product.price.toFixed(2)}</p>
+                <p className="mt-1 font-medium">
+                  ${discountedPrice.toFixed(2)}
+                </p>
+              </div>
+
+              {product.brand && (
+                <div className="rounded-lg bg-gray-50 p-4">
+                  <p className="text-sm text-gray-500">Brand</p>
+                  <p className="mt-1 font-medium">{product.brand}</p>
+                </div>
+              )}
+
+              <div className="rounded-lg bg-gray-50 p-4">
+                <p className="text-sm text-gray-500">Availability</p>
+                <p className="mt-1 font-medium">
+                  {product.stock > 0
+                    ? `${product.stock} in stock`
+                    : "Out of stock"}
+                </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Customer reviews */}
         {activeTab === "reviews" && (
           <div className="py-6">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
@@ -273,50 +312,51 @@ export default function ProductOptions({ product, productReviews }: Props) {
 
             {productReviews.length > 0 ? (
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {productReviews.map((review) => (
-                  <article
-                    key={review.id}
-                    className="rounded-2xl border border-gray-200 p-5 sm:p-6"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="tracking-wide text-amber-400">
-                        {"★".repeat(
-                          Math.max(0, Math.min(5, Math.round(review.rating))),
-                        )}
-                        <span className="text-gray-200">
-                          {"★".repeat(
-                            5 -
-                              Math.max(
-                                0,
-                                Math.min(5, Math.round(review.rating)),
-                              ),
-                          )}
+                {productReviews.map((review) => {
+                  const reviewStars = Math.max(
+                    0,
+                    Math.min(5, Math.round(review.rating)),
+                  );
+
+                  return (
+                    <article
+                      key={review.id}
+                      className="rounded-2xl border border-gray-200 p-5 sm:p-6"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="tracking-wide text-amber-400">
+                          {"★".repeat(reviewStars)}
+                          <span className="text-gray-200">
+                            {"★".repeat(5 - reviewStars)}
+                          </span>
                         </span>
-                      </span>
 
-                      <span className="text-gray-400">···</span>
-                    </div>
+                        <span className="text-gray-400">···</span>
+                      </div>
 
-                    <div className="mt-2 flex items-center gap-2">
-                      <h3 className="text-sm font-semibold">{review.name}</h3>
+                      <div className="mt-2 flex items-center gap-2">
+                        <h3 className="text-sm font-semibold">
+                          {review.name}
+                        </h3>
 
-                      <span
-                        title="Verified customer"
-                        className="flex h-4 w-4 items-center justify-center rounded-full bg-green-600 text-xs text-white"
-                      >
-                        ✓
-                      </span>
-                    </div>
+                        <span
+                          title="Verified customer"
+                          className="flex h-4 w-4 items-center justify-center rounded-full bg-green-600 text-xs text-white"
+                        >
+                          ✓
+                        </span>
+                      </div>
 
-                    <p className="mt-3 text-sm leading-6 text-gray-500">
-                      {review.comment}
-                    </p>
+                      <p className="mt-3 text-sm leading-6 text-gray-500">
+                        {review.comment}
+                      </p>
 
-                    <p className="mt-4 text-xs text-gray-500">
-                      Posted by {review.name}
-                    </p>
-                  </article>
-                ))}
+                      <p className="mt-4 text-xs text-gray-500">
+                        Posted by {review.name}
+                      </p>
+                    </article>
+                  );
+                })}
               </div>
             ) : (
               <p className="py-10 text-center text-gray-500">
@@ -335,7 +375,6 @@ export default function ProductOptions({ product, productReviews }: Props) {
           </div>
         )}
 
-        {/* FAQs */}
         {activeTab === "faqs" && (
           <div className="py-8">
             <h2 className="font-league text-2xl font-bold">
@@ -347,7 +386,9 @@ export default function ProductOptions({ product, productReviews }: Props) {
                 <div key={faq.question} className="py-5">
                   <button
                     type="button"
-                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    onClick={() =>
+                      setOpenFaq(openFaq === index ? null : index)
+                    }
                     className="flex w-full items-center justify-between gap-4 text-left font-medium"
                   >
                     <span>{faq.question}</span>
@@ -357,7 +398,9 @@ export default function ProductOptions({ product, productReviews }: Props) {
                   </button>
 
                   {openFaq === index && (
-                    <p className="mt-3 leading-7 text-gray-600">{faq.answer}</p>
+                    <p className="mt-3 leading-7 text-gray-600">
+                      {faq.answer}
+                    </p>
                   )}
                 </div>
               ))}
