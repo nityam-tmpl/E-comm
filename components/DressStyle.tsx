@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const styles = [
-  { name: "Casual", image: "/images/Casual.png" },
+  { name: "Casual", image: "/images/casual.png" },
   { name: "Formal", image: "/images/Formal.png" },
   { name: "Party", image: "/images/Party.png" },
   { name: "Gym", image: "/images/Gym.png" },
