@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -20,11 +19,11 @@ export type CartItem = {
 type CartContextType = {
   cartItems: CartItem[];
   addToCart: (
-  product: Product,
-  color: string,
-  size: string,
-  quantity?: number
-) => void;
+    product: Product,
+    color: string,
+    size: string,
+    quantity?: number,
+  ) => void;
   increaseQuantity: (id: number, color: string, size: string) => void;
   decreaseQuantity: (id: number, color: string, size: string) => void;
   removeFromCart: (id: number, color: string, size: string) => void;
@@ -57,41 +56,39 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [cartItems, isLoaded]);
 
   function addToCart(
-  product: Product,
-  color: string,
-  size: string,
-  quantity: number = 1
-) {
-  setCartItems((items) => {
-    const existing = items.find(
-      (item) =>
-        item.product.id === product.id &&
-        item.color === color &&
-        item.size === size
-    );
-
-    if (existing) {
-      return items.map((item) =>
-        item.product.id === product.id &&
-        item.color === color &&
-        item.size === size
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
+    product: Product,
+    color: string,
+    size: string,
+    quantity: number = 1,
+  ) {
+    setCartItems((items) => {
+      const existing = items.find(
+        (item) =>
+          item.product.id === product.id &&
+          item.color === color &&
+          item.size === size,
       );
-    }
 
-    return [...items, { product, quantity, color, size }];
-  });
-}
+      if (existing) {
+        return items.map((item) =>
+          item.product.id === product.id &&
+          item.color === color &&
+          item.size === size
+            ? { ...item, quantity: item.quantity + quantity }
+            : item,
+        );
+      }
+
+      return [...items, { product, quantity, color, size }];
+    });
+  }
 
   function increaseQuantity(id: number, color: string, size: string) {
     setCartItems((items) => {
       const updated = items.map((item) =>
-        item.product.id === id &&
-        item.color === color &&
-        item.size === size
+        item.product.id === id && item.color === color && item.size === size
           ? { ...item, quantity: item.quantity + 1 }
-          : item
+          : item,
       );
 
       return updated;
@@ -102,11 +99,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCartItems((items) => {
       const updated = items
         .map((item) =>
-          item.product.id === id &&
-          item.color === color &&
-          item.size === size
+          item.product.id === id && item.color === color && item.size === size
             ? { ...item, quantity: item.quantity - 1 }
-            : item
+            : item,
         )
         .filter((item) => item.quantity > 0);
 
@@ -122,7 +117,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             item.product.id === id &&
             item.color === color &&
             item.size === size
-          )
+          ),
       );
 
       return updated;

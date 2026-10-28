@@ -1,11 +1,12 @@
-
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import Link from "next/link";
 import { UserRound, Mars, Venus, ShoppingBag, ShieldCheck } from "lucide-react";
 import { createClient } from "../../lib/supabase/server";
 import { logout } from "./action";
-
+export const instant = false
 export default async function AccountPage() {
+  await connection();
   const supabase = await createClient();
 
   const {
@@ -24,14 +25,9 @@ export default async function AccountPage() {
     .maybeSingle();
 
   const fullName =
-    profile?.full_name ||
-    user.user_metadata?.full_name ||
-    "Customer";
+    profile?.full_name || user.user_metadata?.full_name || "Customer";
 
-  const gender =
-    profile?.gender ||
-    user.user_metadata?.gender ||
-    "";
+  const gender = profile?.gender || user.user_metadata?.gender || "";
 
   const initials = fullName
     .trim()
@@ -44,9 +40,7 @@ export default async function AccountPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="mb-8">
-        <p className="font-roboto text-sm text-gray-500">
-          Home / My Account
-        </p>
+        <p className="font-roboto text-sm text-gray-500">Home / My Account</p>
 
         <h1 className="mt-3 font-league text-3xl font-bold uppercase sm:text-4xl">
           My Account
@@ -81,9 +75,7 @@ export default async function AccountPage() {
 
           <div className="mt-6 rounded-xl bg-gray-50 p-4">
             <ShieldCheck size={22} className="text-gray-700" />
-            <p className="mt-2 font-league font-semibold">
-              Your account
-            </p>
+            <p className="mt-2 font-league font-semibold">Your account</p>
             <p className="mt-1 font-roboto text-xs leading-5 text-gray-500">
               Your profile information is linked to your account.
             </p>
