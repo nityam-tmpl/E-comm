@@ -39,9 +39,12 @@ export default function Header() {
         <div className="relative flex h-[34px] items-center justify-center bg-black px-8 text-center font-sans text-[12px] text-white md:h-[38px] md:text-[14px]">
           <p>
             Sign up and get 20% off to your first order.{" "}
-            <Link href="/account" className="underline">
-              Sign Up Now
-            </Link>
+            <Link
+  href="/signup"
+  className="font-medium underline underline-offset-2 hover:text-gray-300"
+>
+  Sign Up Now
+</Link>
           </p>
 
           <button

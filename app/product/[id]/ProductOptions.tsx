@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import type { Product, CustomerReview } from "../../types/product";
+import { useCart } from "@/app/context/CartContext";
 
 type Props = {
   product: Product;
@@ -36,13 +37,19 @@ const faqs = [
   },
 ];
 
-export default function ProductOptions({ product, productReviews }: Props) {
+export default function ProductOptions({
+  product,
+  productReviews,
+}: Props) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState("Black");
   const [selectedSize, setSelectedSize] = useState("M");
+  const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
   const [activeTab, setActiveTab] = useState("reviews");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const { addToCart } = useCart();
 
   const images =
     product.images?.length > 0
@@ -51,7 +58,7 @@ export default function ProductOptions({ product, productReviews }: Props) {
 
   const filledStars = Math.max(
     0,
-    Math.min(5, Math.round(product.rating)),
+    Math.min(5, Math.round(product.rating))
   );
 
   const discountedPrice =
@@ -134,7 +141,9 @@ export default function ProductOptions({ product, productReviews }: Props) {
           </p>
 
           <div className="mt-6">
-            <p className="mb-3 font-medium">Color: {selectedColor}</p>
+            <p className="mb-3 font-medium">
+              Color: {selectedColor}
+            </p>
 
             <div className="flex items-center gap-3">
               {colors.map((color) => (
@@ -160,7 +169,9 @@ export default function ProductOptions({ product, productReviews }: Props) {
           </div>
 
           <div className="mt-6">
-            <p className="mb-3 font-medium">Size: {selectedSize}</p>
+            <p className="mb-3 font-medium">
+              Size: {selectedSize}
+            </p>
 
             <div className="flex flex-wrap gap-3">
               {sizes.map((size) => (
@@ -180,15 +191,51 @@ export default function ProductOptions({ product, productReviews }: Props) {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setAddedToCart(!addedToCart)}
-            className={`mt-3 w-full rounded-full px-6 py-4 font-medium text-white transition ${
-              addedToCart ? "bg-green-700" : "bg-black hover:bg-gray-800"
-            }`}
-          >
-            {addedToCart ? "Added to Cart ✓" : "Add to Cart"}
-          </button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <div className="flex h-14 w-full items-center justify-between rounded-full bg-[#F0EEED] px-5 sm:w-36 sm:shrink-0">
+              <button
+                type="button"
+                onClick={() =>
+                  setQuantity((current) => Math.max(1, current - 1))
+                }
+                aria-label="Decrease quantity"
+                disabled={quantity <= 1}
+                className="px-2 text-2xl leading-none disabled:cursor-not-allowed disabled:text-gray-400"
+              >
+                −
+              </button>
+
+              <span className="font-medium">{quantity}</span>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setQuantity((current) => current + 1)
+                }
+                aria-label="Increase quantity"
+                className="px-2 text-2xl leading-none"
+              >
+                +
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                for (let i = 0; i < quantity; i++) {
+                  addToCart(product, selectedColor, selectedSize);
+                }
+                setAddedToCart(true);
+              }}
+              className={`h-14 w-full rounded-full px-6 font-medium text-white transition ${
+                addedToCart
+                  ? "bg-green-700"
+                  : "bg-black hover:bg-gray-800"
+              }`}
+            >
+              {addedToCart ? "Added to Cart ✓" : "Add to Cart"}
+            </button>
+          </div>
         </div>
       </section>
 
@@ -315,7 +362,7 @@ export default function ProductOptions({ product, productReviews }: Props) {
                 {productReviews.map((review) => {
                   const reviewStars = Math.max(
                     0,
-                    Math.min(5, Math.round(review.rating)),
+                    Math.min(5, Math.round(review.rating))
                   );
 
                   return (

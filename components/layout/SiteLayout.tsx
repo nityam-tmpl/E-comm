@@ -1,6 +1,7 @@
 import Header from "../Header";
 import Footer from "../Footer";
 import Newsletter from "../NewsLetter";
+import { CartProvider } from "../../app/context/CartContext";
 
 export default function SiteLayout({
   children,
@@ -9,10 +10,12 @@ export default function SiteLayout({
 }) {
   return (
     <div>
+      <CartProvider>
       <Header />
       {children}
       <Newsletter />
       <Footer />
+      </CartProvider>
     </div>
   );
 }
